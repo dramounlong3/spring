@@ -19,10 +19,17 @@ public class MyController {
     @Qualifier("myPrinter")
     private Printer printer;
 
-
     @Autowired
     @Qualifier("hpPrinter")
     private Printer hpPrinter;
+
+    @Autowired
+    @Qualifier("sonyPrinter")
+    private  Printer sonyPrinter;
+
+    @Autowired
+    private SonyPrinter sony;
+
 
     @RequestMapping("/test1")
     public String test() {
@@ -35,5 +42,12 @@ public class MyController {
     public String test2() {
         hpPrinter.print("hello HpPrinter");
         return "HpPrinter";
+    }
+
+    @RequestMapping("/test3")
+    public String test3() {
+        sonyPrinter.print("hello SonyPrinter");
+        sony.myFunction();
+        return "SonyPrinter";
     }
 }
