@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 // RestController也會讓此class建立bean於Spring
 @Scope("session") //配合HpPrinter設定
-@RestController
+@RestController   //類似強化版的@Component, 為了讓class內的方法可以配上http method的requestMapping
+@RequestMapping("/demo") //統一入口
 public class MyController {
 
     // Autowired => DI: Dependency injection, 依賴注入
@@ -30,7 +31,7 @@ public class MyController {
     @Autowired
     private SonyPrinter sony;
 
-
+    // @RequestMapping會配對所有http method, 且class一定要@Controller or RestController
     @RequestMapping("/test1")
     public String test() {
         printer.print("hello myPrinter");
