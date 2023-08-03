@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,11 +93,17 @@ public class MyController {
                         @PathVariable Double score,
                         @PathVariable String chinese
                         ) {
+        //格式化日期時間
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         //Request Body
         System.out.println("id: " + student.id);
         System.out.println("name: " + student.name);
         System.out.println("score: " + student.score); //沒有給會是null, 若多給則捨棄參數, 給錯型態或無法自動轉型的值會報錯
         System.out.println("word: " + student.word); //測試中文
+        System.out.println("currentTime: " + student.getCurrentTime()); //Thu Aug 03 12:31:00 GMT+00:00 2023
+        System.out.println("sdFormat.format(student.currentTime): " + sdFormat.format(student.currentTime)); //測試日期 時間, 格式化後
+        System.out.println("today: " + student.today); //測試日期
 
         //Request header
         System.out.println("contentType: " + contentType);
