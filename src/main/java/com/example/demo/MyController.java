@@ -3,11 +3,17 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.PastOrPresent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // RestController也會讓此class建立bean於Spring
 @Scope("session") //配合HpPrinter設定
@@ -33,6 +39,10 @@ public class MyController {
 
     @Autowired
     private SonyPrinter sony;
+
+    // 使用spring jdbc功能
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     // @RequestMapping會配對所有http method, 且class一定要@Controller or RestController
     @RequestMapping("/test1")
@@ -120,12 +130,31 @@ public class MyController {
         return "Hi, your requestBody is ok. 測試中文";
     }
 
+    // Spring預設只會回傳200和500的狀態碼
+    // 測試當runtimeException時，ControllerAdvice內的ExceptionHandler是否可以抓到此錯誤
+    // 最後回傳自定義狀態碼
+    @RequestMapping("/test6")
+    public ResponseEntity<?> test6() {
+        throw new RuntimeException("test6 error.");
+    }
 
+    // 與test6交叉測試
+    @RequestMapping("/test7")
+    public ResponseEntity<?> test7() {
+        throw new IllegalArgumentException("test7 error.");
+    }
+
+    // 測試interceptor(攔截器)
+    @RequestMapping("/test8")
+    public String test8() {
+        System.out.println("執行test8 controller method");
+        return "回傳test8 controller method";
+    }
 
 
     // Spring會將回傳型別為自定義class的物件透過jackson套件自動轉為json格式
     @RequestMapping("/student")
-    public Student student() {
+    public ResponseEntity<?> student() {
         Student student = new Student();
         student.setName("kyle");
         student.courseList.add("Chinese"); //courseList沒有設定修飾子, 預設是同一個package底下的class都可以存取該成員
@@ -137,6 +166,40 @@ public class MyController {
         tempList.add("讀書");
         tempList.add("逛街");
         student.setTodoList(tempList);
-        return student;
+        return ResponseEntity.status(200).body(student);
     }
+
+    //spring jdbc insert
+    @PostMapping("/sql/student")
+    public ResponseEntity<?> insert(@RequestBody Student student) {
+
+        //透過冒號變數的方式讓下面宣告的map代入
+        String sql = "INSERT INTO student(id, name, courseList, todoList) VALUE(:studentId, :studentName, :studentCourseList, :studentTodoList)";
+
+        Map<String, Object> map = new HashMap<>();
+        //由key value方式組成, 透過request傳入的參數, 代入至sql語法執行
+        map.put("studentId", student.getId());
+        map.put("studentName", student.getName());
+        map.put("studentCourseList", student.getCourseList().toString());
+        map.put("studentTodoList", student.getTodoList().toString());
+
+        //update 對應到 sql可執行 insert, update, delete
+        namedParameterJdbcTemplate.update(sql, map);
+
+        return ResponseEntity.status(201).body(student);
+    }
+
+
+    // jdbc delete
+    @DeleteMapping("/sql/student/{studentId}")
+    public ResponseEntity<?> delete(@PathVariable Integer studentId) {
+        String sql = "DELETE FROM student WHERE id = :studentId";
+        Map<String,Object> map = new HashMap<>();
+        map.put("studentId", studentId);
+
+        namedParameterJdbcTemplate.update(sql, map);
+        return  new ResponseEntity("執行delete方法", HttpStatus.OK);
+    }
+
 }
+
