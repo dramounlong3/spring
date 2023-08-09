@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.PastOrPresent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,6 +191,53 @@ public class MyController {
         return ResponseEntity.status(201).body(student);
     }
 
+    //取得自動產生的primary key
+    @PostMapping("sql/student2")
+    public ResponseEntity<?> insert2(@RequestBody Student student) {
+        String sql = "INSERT INTO student2(name, courseList, todoList) VALUE(:studentName, :studentCourseList, :studentTodoList)";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("studentName", student.getName());
+        map.put("studentCourseList", student.getCourseList().toString());
+        map.put("studentTodoList", student.getTodoList().toString());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
+
+        //取得自動生成的id, value前面若是用long型態則須改為longValue
+        int id = keyHolder.getKey().intValue();
+
+        System.out.println("mysql自動生成的 id: " + id);
+        return ResponseEntity.status(201).body(student);
+    }
+
+    @PostMapping("/sql/student/batch")
+    public ResponseEntity<?> insertList(@RequestBody List<Student> studentList) {
+        String sql = "INSERT INTO student2 (name, courseList, todoList) VALUE(:studentName, :studentCourseList, :studentTodoList)";
+
+        //創建一個MapSqlParameterSources型態的陣列, 並且長度設為studentList的大小
+        MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[studentList.size()];
+
+        for(int i = 0; i < studentList.size(); i++){
+            //取得list內的每一個student object
+            Student student = studentList.get(i);
+
+            //類似map的用法, 將每一個陣列中map的key value指定好
+            parameterSources[i] = new MapSqlParameterSource();
+            parameterSources[i].addValue("studentName", student.getName());
+            parameterSources[i].addValue("studentCourseList",student.getCourseList().toString());
+            parameterSources[i].addValue("studentTodoList",student.getTodoList().toString());
+        }
+
+        KeyHolder[] keyHolder = new GeneratedKeyHolder[studentList.size()];
+
+
+        // 一次將所有的student object insert到DB, 一次完成多筆ROW的INSERT
+        namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
+        return ResponseEntity.status(201).body(studentList);
+    }
+
 
     // jdbc delete
     @DeleteMapping("/sql/student/{studentId}")
@@ -201,5 +250,35 @@ public class MyController {
         return  new ResponseEntity("執行delete方法", HttpStatus.OK);
     }
 
+    // 取得id > 此值的數據
+    // 同時計算table的數量
+    @GetMapping("sql/student/{studentId}")
+    public ResponseEntity<?> select(@PathVariable Integer studentId) {
+        // queryForObject只適合用在count(*)
+        String countSql = "SELECT COUNT(1) FROM student2";
+        Map<String, Object> countMap = new HashMap<>();
+
+        // 透過第三個參數將回傳的結果轉回Integer, 此方法會回傳object
+        Integer count = namedParameterJdbcTemplate.queryForObject(countSql, countMap, Integer.class);
+        System.out.println("student2的數量有: " + count);
+
+        // 欄位名稱和rowMapper需一致
+        String sql = "SELECT id, name, courseList, todoList FROM student2 WHERE id >= :studentId";
+
+        // 創建一個空的map, 僅是為了放入query的參數
+        Map<String, Object> map = new HashMap<>();
+        map.put("studentId", studentId);
+
+        // Student2RowMapper將SQL object 轉為 java object 並回傳list
+        List<Student> list =  namedParameterJdbcTemplate.query(sql, map, new Student2RowMapper());
+
+        return ResponseEntity.status(200).body(list);
+        // 若最後要回傳的方式如果要指定第一筆數據則必須判斷list是否有值, 否則會有outOfBound的錯誤
+//        if(list.size() > 0) {
+//            return ResponseEntity.status(200).body(list.get(0));
+//        } else {
+//            return null;
+//        }
+    }
 }
 
