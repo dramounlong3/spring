@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Zsample;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

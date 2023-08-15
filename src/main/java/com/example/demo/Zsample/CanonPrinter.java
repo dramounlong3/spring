@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Zsample;
 
 // 此class透過MyConfiguration設定為bean, 等同於在此直接加上@Component
 public class CanonPrinter implements Printer{

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Zsample;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

@@ -1,12 +1,10 @@
-package com.example.demo;
+package com.example.demo.Zsample;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.sql.rowset.WebRowSet;
 
 // 設定Spring用的class, class名稱不重要
 // WebMvcConfigurer是和Interceptor相關才需實作的

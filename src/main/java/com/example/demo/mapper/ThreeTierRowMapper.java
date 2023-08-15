@@ -1,23 +1,23 @@
-package com.example.demo;
+package com.example.demo.mapper;
 
+import com.example.demo.model.ThreeTierStudent;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Student2RowMapper implements RowMapper<Student> {
+public class ThreeTierRowMapper implements RowMapper<ThreeTierStudent> {
 
     // resultSet= 從資料庫取得的數據(資料集就是controller所撰寫的sql語法), i= 第幾筆數據 (很少用)
     // 方法的返回類型需要和implements的類型一致
     // rowMapper一次只會取回一條數據
     @Override
-    public Student mapRow(ResultSet resultSet, int i) throws SQLException {
+    public ThreeTierStudent mapRow(ResultSet resultSet, int i) throws SQLException {
 
-        Student student = new Student();
+        ThreeTierStudent student = new ThreeTierStudent();
 
         // get內的參數名稱 需對應到 controller SQL的select名稱, 例如有使用別名, 這邊也得使用別名
         // get的型態需對應資料庫中的型態
@@ -35,4 +35,5 @@ public class Student2RowMapper implements RowMapper<Student> {
         student.setTodoList(tempList);
         return student;
     }
+
 }

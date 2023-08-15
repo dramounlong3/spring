@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Zsample;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -16,19 +16,19 @@ import java.util.Date;
 public class MyAspect {
 
     //在切入點SonyPrinter.print()執行之前執行
-    @Before("execution (* com.example.demo.SonyPrinter.print(..))")
+    @Before("execution (* com.example.demo.Zsample.SonyPrinter.print(..))")
     public void before() {
         System.out.println("I'm before.");
     }
 
     //在切入點SonyPrinter.print()執行之後執行
-    @After("execution (* com.example.demo.SonyPrinter.print(..))")
+    @After("execution (* com.example.demo.Zsample.SonyPrinter.print(..))")
     public void after() {
         System.out.println("I'm after.");
     }
 
     //在切入點SonyPrinter.myFunction()執行的前後都執行, 但因myFunction非interface裡面的function不確定是否因為這樣所以無法透過左方的method連結到
-    @Around("execution (* com.example.demo.SonyPrinter.myFunction(..))")
+    @Around("execution (* com.example.demo.Zsample.SonyPrinter.myFunction(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("開始計時...");
         Date start = new Date();
