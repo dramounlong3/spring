@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-@Component
+// @Component
+@Repository //效果與Component一樣, 只是標記為DAO層, 專門與資料庫溝通的repository
 public class ThreeTierStudentDaoImp implements ThreeTierStudentDao{
 
     // 注入namedParameterJdbcTemplate的bean (從application.properties設定檔而來)

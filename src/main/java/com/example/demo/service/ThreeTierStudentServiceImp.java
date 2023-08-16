@@ -4,8 +4,10 @@ import com.example.demo.dao.ThreeTierStudentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+// @Component
+@Service //效果與Component一樣，只是順便標記為service
 public class ThreeTierStudentServiceImp implements ThreeTierStudentService{
 
     // 注入Dao的bean
