@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import com.example.demo.model.ThreeTierStudent;
 import com.example.demo.mapper.ThreeTierRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class ThreeTierStudentDaoImp implements ThreeTierStudentDao{
 
     // 注入namedParameterJdbcTemplate的bean (從application.properties設定檔而來)
     @Autowired
+    // @Qualifier("test1JdbcTemplate") // 當在測試多資料庫時，導致這邊需要加Qualifer，要run這段code時，需將application.properties改回單一資料庫設定並將此行註解
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.demo.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 public class AccountDaoImp implements AccountDao{
 
     @Autowired
+    // @Qualifier("test1JdbcTemplate") // 當在測試多資料庫時，導致這邊需要加Qualifer，要run這段code時，需將application.properties改回單一資料庫設定並將此行註解
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
