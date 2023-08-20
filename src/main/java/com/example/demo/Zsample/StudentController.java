@@ -1,5 +1,6 @@
 package com.example.demo.Zsample;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,12 +36,10 @@ public class StudentController {
         return "執行資料庫delete";
     }
 
-
     // 示範ResponseEntity<?> ?表示可以回傳任意類型
     @GetMapping()
     public ResponseEntity<?> res() {
         Student student = new Student();
         return ResponseEntity.status(HttpStatus.OK).body(student);
     }
-
 }
