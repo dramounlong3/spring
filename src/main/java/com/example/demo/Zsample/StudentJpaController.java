@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
+
 @RestController
 public class StudentJpaController {
 
@@ -38,12 +41,44 @@ public class StudentJpaController {
         return ResponseEntity.status(200).body("執行 jpa 資料庫delete操作");
     }
 
-    @GetMapping("/jpa/{studentId}")
+    @GetMapping("/jpa/id/{studentId}")
     public ResponseEntity<?> read(@PathVariable Integer studentId) {
 
         //沒有找到就回傳null
         StudentJpa studentJpa =  studentJpaRepository.findById(studentId).orElse(null);
         return ResponseEntity.status(200).body(studentJpa);
     }
+
+
+    // findByXxx spring boot會根據Xxx產生對應的SQL到資料庫搜尋
+    @GetMapping("/jpa/name/{studentName}")
+    public ResponseEntity<?> findByName(@PathVariable String studentName) {
+
+        //沒有找到就回傳null
+        StudentJpa studentJpa =  studentJpaRepository.findByName(studentName).orElse(null);
+        return ResponseEntity.status(200).body(studentJpa);
+    }
+
+    // findByXxxAndYyy spring boot會根據Xxx, Yyy產生對應的SQL到資料庫搜尋
+    @GetMapping("/jpa/id/{studentId}/name/{studentName}")
+    public ResponseEntity<?> findByIdAndName(@PathVariable Integer studentId,
+                                        @PathVariable String studentName) {
+        //沒有找到就回傳null
+        //傳進去的參數必須和and的順序一致
+        StudentJpa studentJpa =  studentJpaRepository.findByIdAndName(studentId, studentName).orElse(null);
+        return ResponseEntity.status(200).body(studentJpa);
+    }
+
+    // 使用Query的原生SQL方法搜尋
+    // 如果要搜尋的pathvariable, 需要以URL encod編碼代替特殊符號, 特殊符號例如 %5b = [   %5d = ]
+    // http://localhost:8080/jpa/id/2/todo/%5bwatch movie, dacing%5d
+    @GetMapping("/jpa/id/{id}/todo/{todolist}")
+    public ResponseEntity<?> useQuery(@PathVariable Integer id
+                ,@PathVariable String todolist) {
+       List<StudentJpa> studentJpaList = studentJpaRepository.useQuery(id, todolist);
+       return  ResponseEntity.status(200).body(studentJpaList);
+    }
+
+
 
 }
