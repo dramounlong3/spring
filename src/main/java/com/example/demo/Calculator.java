@@ -1,9 +1,9 @@
-
+package com.example.demo;
 
 public class Calculator {
 
     public int add (int x, int y) {
-        int result = x + y;
+        return x + y;
     }
 
     public static void main(String[] args) {
