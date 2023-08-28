@@ -2,8 +2,16 @@ package com.example.demo.unitTest;
 
 public class Calculator {
 
-    public int add (int x, int y) {
+    public int add(int x, int y) {
         return x + y;
+    }
+
+    public int divide(int x, int y) {
+        return x / y;
+    }
+
+    public int multiple(int x, int y) {
+        return x * y;
     }
 
     public static void main(String[] args) {

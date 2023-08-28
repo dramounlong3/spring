@@ -30,6 +30,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <!--exclusion禁用junit4, 因為spring boot 2.2和2.3, junit4和junit5都可以使用-->
+            <!--spring boot 2.4之後只能使用junit5, 且junit5為未來使用趨勢, 故應避免使用junit4-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

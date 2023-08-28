@@ -27,12 +27,17 @@ public class ThreeTierRowMapper implements RowMapper<ThreeTierStudent> {
 
         // 將含有陣列符號的字串先轉為list, 先取代掉前後的[], split將字串切成陣列, 最後再將陣列轉arraylist
         String tempStr= resultSet.getString("courseList").replaceAll("\\[|\\]","");
-        List<String> tempList = new ArrayList<String>(Arrays.asList(tempStr.split(",")));
+        List<String> tempList = new ArrayList<String>(Arrays.asList(tempStr.split(", ")));
         student.setCourseList(tempList);
 
-        tempStr = resultSet.getString("todoList").replaceAll("\\[|\\}]","");
-        tempList = new ArrayList<>(Arrays.asList(tempStr.split(",")));
+        tempStr = resultSet.getString("todoList").replaceAll("\\[|\\]","");
+        tempList = new ArrayList<>(Arrays.asList(tempStr.split(", ")));
         student.setTodoList(tempList);
+
+        student.setScore(resultSet.getDouble("score"));
+        student.setGraduate(resultSet.getBoolean("graduate"));
+        student.setCreatedate(resultSet.getTimestamp("create_date"));
+
         return student;
     }
 
