@@ -20,7 +20,7 @@ class CalculatorTest {
         assertEquals(100, result);
         assertNotNull(result);
         assertTrue(result > 1);
-        assertFalse(result < 999999999);
+        assertFalse(result > 999999999);
     }
 
     @DisplayName("測試方法改為以此名稱顯示")
@@ -33,7 +33,7 @@ class CalculatorTest {
     }
 
     //@Disabled可以取消該單元測試
-    @Disabled
+    //@Disabled  //註解掉 @Disabled 是因為, 打包時會跳warning
     @Test
     void multiple() {
         Calculator calculator = new Calculator();
