@@ -28,21 +28,22 @@ public class ThreeTierStudentDaoImp implements ThreeTierStudentDao{
 
     @Override
     public List<ThreeTierStudent> getById(Integer studentId) {
-        String sql = "SELECT id, name, courseList, todoList, score, graduate, create_date FROM student2 WHERE id = :studentId";
+        String sql = "SELECT id, name, courseList, todoList, score, graduate, create_date FROM threetier WHERE id = :studentId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("studentId", studentId);
 
+
         // 執行query, 並將db所回傳的物件格式透過rowMapper轉換為java物件
         List<ThreeTierStudent> list = namedParameterJdbcTemplate.query(sql, map, new ThreeTierRowMapper());
 
-        return list;
+            return list;
     }
 
     @Override
     public Integer insertStudent(ThreeTierStudent threeTierStudent) {
         //透過冒號變數的方式讓下面宣告的map代入
-        String sql = "INSERT INTO student2(id, name, courseList, todoList, score, graduate, create_date) VALUE(:studentId, :studentName, :studentCourseList, :studentTodoList, :studentScore, :studentGraduate, :studentCreate_date)";
+        String sql = "INSERT INTO threetier(id, name, courseList, todoList, score, graduate, create_date) VALUES(:studentId, :studentName, :studentCourseList, :studentTodoList, :studentScore, :studentGraduate, :studentCreate_date)";
 
         Map<String, Object> map = new HashMap<>();
         //由key value方式組成, 透過request傳入的參數, 代入至sql語法執行
@@ -66,7 +67,7 @@ public class ThreeTierStudentDaoImp implements ThreeTierStudentDao{
 
     @Override
     public void deleteById(Integer studentId) {
-        String sql = "DELETE FROM student2 WHERE id = :studentId";
+        String sql = "DELETE FROM threetier WHERE id = :studentId";
         Map<String, Integer> map = new HashMap<>();
         map.put("studentId",studentId);
         namedParameterJdbcTemplate.update(sql, map);

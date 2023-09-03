@@ -25,17 +25,22 @@ class ThreeTierStudentDaoImpTest {
 
     @Test
     void getById() {
-        List<ThreeTierStudent> threeTierStudent = threeTierStudentDao.getById(1);
+
+        // 如果專案同時有使用到jpa 和 jdb針對同一張table去操作
+        // 必須在測試用的application.properties加上 spring.jpa.hibernate.ddl-auto=none, 避免H2 sql script執行時有問題
+        List<ThreeTierStudent> threeTierStudent = threeTierStudentDao.getById(4);
+
 
         assertNotNull(threeTierStudent);
         assertEquals("Kyle", threeTierStudent.get(0).getName());
-        assertEquals(90.3,threeTierStudent.get(0).getScore());
+        assertEquals(87.2, threeTierStudent.get(0).getScore());
         assertTrue(threeTierStudent.get(0).getGraduate());
         assertNotNull(threeTierStudent.get(0).getCreatedate());
     }
 
     @Test
-    @Transactional // 因為有新增資料故需增加Tansactional, 讓每次測試完都rollback
+    @Transactional
+        // 因為有新增資料故需增加Tansactional, 讓每次測試完都rollback
     void insertStudent() {
         List<String> courseList = new ArrayList<>();
         List<String> todoList = new ArrayList<>();
@@ -45,6 +50,7 @@ class ThreeTierStudentDaoImpTest {
         todoList.add("todo1");
 
         ThreeTierStudent threeTierStudent = new ThreeTierStudent();
+        threeTierStudent.setId(9);
         threeTierStudent.setName("Kevin");
         threeTierStudent.setCourseList(courseList);
         threeTierStudent.setTodoList(todoList);
@@ -57,7 +63,7 @@ class ThreeTierStudentDaoImpTest {
 
         List<ThreeTierStudent> studentList = threeTierStudentDao.getById(studentId);
         assertNotNull(studentList);
-        assertEquals("Kevin",studentList.get(0).getName());
+        assertEquals("Kevin", studentList.get(0).getName());
         assertEquals(66.6, studentList.get(0).getScore());
         assertFalse(studentList.get(0).getGraduate());
         // rowMapper 要特別注意取回的字串透過逗號轉成ArrayList的時候有可能逗號後面會有空白, 需在rowMapper特別注意
@@ -71,9 +77,9 @@ class ThreeTierStudentDaoImpTest {
     @Test
     @Transactional
     void deleteById() {
-        threeTierStudentDao.deleteById(1);
-        List<ThreeTierStudent> student = threeTierStudentDao.getById(1);
-        assertEquals(0,student.size());
+        threeTierStudentDao.deleteById(9);
+        List<ThreeTierStudent> student = threeTierStudentDao.getById(9);
+        assertEquals(0, student.size());
     }
 
 }
