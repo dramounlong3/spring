@@ -3,9 +3,7 @@ package com.example.demo.Zsample.resttemplate;
 import com.example.demo.Zsample.commonModel.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest")
@@ -30,5 +28,12 @@ public class RestTemplateController {
     public ResponseEntity<?> templateEntity() {
         Student student = restTemplateService.getForEntity();
         return ResponseEntity.status(200).body(student);
+    }
+
+
+    @PostMapping("/templatePostEntity")
+    public ResponseEntity<?> templatePostEntity(@RequestBody Student student) {
+        Student responseEntity = restTemplateService.postForEntity(student);
+        return ResponseEntity.status(200).body(responseEntity);
     }
 }

@@ -12,4 +12,6 @@ public interface RestTemplateService {
 
    public Student getForEntity();
 
+   public Student postForEntity(Student student);
+
 }

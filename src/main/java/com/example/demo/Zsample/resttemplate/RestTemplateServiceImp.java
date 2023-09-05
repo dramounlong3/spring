@@ -72,4 +72,25 @@ public class RestTemplateServiceImp implements RestTemplateService {
         return st;
     }
 
+
+    @Override
+    public Student postForEntity(Student student) {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        //queryParamMap是queryParameter, 就是URL ?後面的參數
+        ResponseEntity<Student> studentEntity = restTemplate.postForEntity("http://localhost:8081/demo/sql/student",
+                student,
+                Student.class
+        );
+        //取得status code
+        System.out.printf("statusCode= %s\n", studentEntity.getStatusCode());
+
+        //取得body
+        Student st = studentEntity.getBody();
+
+        System.out.println("postForEntity is being called.");
+        return st;
+    }
+
 }

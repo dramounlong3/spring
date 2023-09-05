@@ -193,6 +193,8 @@ public class MyController {
         //update 對應到 sql可執行 insert, update, delete
         namedParameterJdbcTemplate.update(sql, map);
 
+        System.out.println("sql/student insert is being called.");
+
         return ResponseEntity.status(201).body(student);
     }
 
