@@ -1,7 +1,6 @@
 package com.example.demo.Zsample.resttemplate;
 
-import com.example.sqlservertest.model.ChannelMsgtype;
-import com.example.sqlservertest.service.RestTemplateService;
+import com.example.demo.Zsample.commonModel.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +14,21 @@ public class RestTemplateController {
     @Autowired
     RestTemplateService restTemplateService;
 
-    @GetMapping("/template")
-    public ResponseEntity<?> list() {
-        ChannelMsgtype[] restTemplateArray = restTemplateService.list();
-        return ResponseEntity.status(200).body(restTemplateArray);
-    }
+//    @GetMapping("/template")
+//    public ResponseEntity<?> list() {
+//        ChannelMsgtype[] restTemplateArray = restTemplateService.list();
+//        return ResponseEntity.status(200).body(restTemplateArray);
+//    }
 
     @GetMapping("/templateWithParam")
     public ResponseEntity<?> templateWithParam() {
-        ChannelMsgtype[] restTemplateArray = restTemplateService.getForObjectWithParam();
-        return ResponseEntity.status(200).body(restTemplateArray);
+        Student student = restTemplateService.getForObjectWithParam();
+        return ResponseEntity.status(200).body(student);
+    }
+
+    @GetMapping("/templateEntity")
+    public ResponseEntity<?> templateEntity() {
+        Student student = restTemplateService.getForEntity();
+        return ResponseEntity.status(200).body(student);
     }
 }

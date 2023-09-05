@@ -18,6 +18,7 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("執行myInterceptor.preHandler");
         response.setStatus(401); //強制定義回傳代碼, true時 進到controller後, 如又有設定其他代碼就會被蓋掉
+        //response.setStatus(200); //先覆蓋成200
         return true;
 
         // 若true則印出順序為

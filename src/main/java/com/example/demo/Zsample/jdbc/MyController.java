@@ -38,7 +38,7 @@ public class MyController {
 
     @Autowired
     @Qualifier("sonyPrinter")
-    private  Printer sonyPrinter;
+    private Printer sonyPrinter;
 
     @Autowired
     private SonyPrinter sony;
@@ -73,10 +73,10 @@ public class MyController {
     // name表示將url參數名稱testId的值帶入到程式內的變數sid, 很少用
     // required表示此參數是否為必要參數, 若設定false則程式內的變數有可能是null, 要避免發生NullPointerException的問題
     @RequestMapping("/test4")
-    public  String test4(@RequestParam Integer id,
-                         @RequestParam(name =  "testId") Integer sid,
-                         @RequestParam(required = false) String name,
-                         @RequestParam(defaultValue = "99") Integer age){
+    public ResponseEntity<?> test4(@RequestParam Integer id,
+                                   @RequestParam(name = "testId") Integer sid,
+                                   @RequestParam(required = false) String name,
+                                   @RequestParam(defaultValue = "99") Integer age) {
         System.out.println("id: " + id);
         System.out.println("sid: " + sid);
         System.out.println("name: " + name);
@@ -86,7 +86,11 @@ public class MyController {
         // sid: 456
         // name: null
         // age: 99
-        return "Hi, your request is ok.";
+
+        Student student = new Student();
+        student.setId(id);
+        student.setName(name);
+        return ResponseEntity.status(200).body(student);
     }
 
     // @RequestBody 取得request body的內容
@@ -98,14 +102,14 @@ public class MyController {
     // @PathVariable 取得url路徑值, 且中間的參數值不可以省略
     @RequestMapping("/test5/{id}/{name}/{score}/{chinese}")
     public String test5(@RequestBody formatRequest student,
-                        @RequestHeader(name= "Content-type") String contentType,
+                        @RequestHeader(name = "Content-type") String contentType,
                         @RequestHeader(required = false) String age,
                         @RequestHeader(defaultValue = "100") Integer grade,
                         @PathVariable Integer id, //與上方路徑變數名稱一定要相同
                         @PathVariable String name,
                         @PathVariable Double score,
                         @PathVariable String chinese
-                        ) {
+    ) {
         //格式化日期時間
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -220,15 +224,15 @@ public class MyController {
         //創建一個MapSqlParameterSources型態的陣列, 並且長度設為studentList的大小
         MapSqlParameterSource[] parameterSources = new MapSqlParameterSource[studentList.size()];
 
-        for(int i = 0; i < studentList.size(); i++){
+        for (int i = 0; i < studentList.size(); i++) {
             //取得list內的每一個student object
             Student student = studentList.get(i);
 
             //類似map的用法, 將每一個陣列中map的key value指定好
             parameterSources[i] = new MapSqlParameterSource();
             parameterSources[i].addValue("studentName", student.getName());
-            parameterSources[i].addValue("studentCourseList",student.getCourseList().toString());
-            parameterSources[i].addValue("studentTodoList",student.getTodoList().toString());
+            parameterSources[i].addValue("studentCourseList", student.getCourseList().toString());
+            parameterSources[i].addValue("studentTodoList", student.getTodoList().toString());
         }
 
         KeyHolder[] keyHolder = new GeneratedKeyHolder[studentList.size()];
@@ -244,11 +248,11 @@ public class MyController {
     @DeleteMapping("/sql/student/{studentId}")
     public ResponseEntity<?> delete(@PathVariable Integer studentId) {
         String sql = "DELETE FROM student WHERE id = :studentId";
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("studentId", studentId);
 
         namedParameterJdbcTemplate.update(sql, map);
-        return  new ResponseEntity("執行delete方法", HttpStatus.OK);
+        return new ResponseEntity("執行delete方法", HttpStatus.OK);
     }
 
     // 取得id > 此值的數據
@@ -271,7 +275,7 @@ public class MyController {
         map.put("studentId", studentId);
 
         // threetierRowMapper將SQL object 轉為 java object 並回傳list
-        List<Student> list =  namedParameterJdbcTemplate.query(sql, map, new studentRowMapper());
+        List<Student> list = namedParameterJdbcTemplate.query(sql, map, new studentRowMapper());
 
         return ResponseEntity.status(200).body(list);
         // 若最後要回傳的方式如果要指定第一筆數據則必須判斷list是否有值, 否則會有outOfBound的錯誤

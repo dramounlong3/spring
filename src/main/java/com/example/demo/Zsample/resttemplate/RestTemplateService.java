@@ -1,12 +1,15 @@
 package com.example.demo.Zsample.resttemplate;
 
-import com.example.sqlservertest.model.ChannelMsgtype;
+import com.example.demo.Zsample.commonModel.Student;
+import org.springframework.http.ResponseEntity;
 
 
 public interface RestTemplateService {
 
-   public ChannelMsgtype[] list();
+   //public ChannelMsgtype[] list();
 
-   public ChannelMsgtype[] getForObjectWithParam();
+   public Student getForObjectWithParam();
+
+   public Student getForEntity();
 
 }
