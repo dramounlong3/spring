@@ -14,4 +14,8 @@ public interface RestTemplateService {
 
    public Student postForEntity(Student student);
 
+   public ResponseEntity<ChannelMsgtype[]> exchangeGet();
+
+   public ResponseEntity<String> exchangePost(ChannelMsgtype channelMsgtype);
+
 }

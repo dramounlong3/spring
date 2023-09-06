@@ -36,4 +36,16 @@ public class RestTemplateController {
         Student responseEntity = restTemplateService.postForEntity(student);
         return ResponseEntity.status(200).body(responseEntity);
     }
+
+    @GetMapping("/templatetExchangeGet")
+    public ResponseEntity<?> templatetExchangeGet() {
+        ResponseEntity<ChannelMsgtype[]> result = restTemplateService.exchangeGet();
+        return ResponseEntity.status(200).body(result.getBody());
+    }
+
+    @PostMapping("/templatetExchangePost")
+    public ResponseEntity<?> templatetExchangePost(@RequestBody ChannelMsgtype channelMsgtype) {
+        ResponseEntity<String> result = restTemplateService.exchangePost(channelMsgtype);
+        return ResponseEntity.status(200).body(result.getBody());
+    }
 }
