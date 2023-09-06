@@ -39,13 +39,13 @@ public class RestTemplateController {
 
     @GetMapping("/templatetExchangeGet")
     public ResponseEntity<?> templatetExchangeGet() {
-        ResponseEntity<ChannelMsgtype[]> result = restTemplateService.exchangeGet();
+        ResponseEntity<Student> result = restTemplateService.exchangeGet();
         return ResponseEntity.status(200).body(result.getBody());
     }
 
     @PostMapping("/templatetExchangePost")
-    public ResponseEntity<?> templatetExchangePost(@RequestBody ChannelMsgtype channelMsgtype) {
-        ResponseEntity<String> result = restTemplateService.exchangePost(channelMsgtype);
+    public ResponseEntity<?> templatetExchangePost(@RequestBody Student student) {
+        ResponseEntity<String> result = restTemplateService.exchangePost(student);
         return ResponseEntity.status(200).body(result.getBody());
     }
 }

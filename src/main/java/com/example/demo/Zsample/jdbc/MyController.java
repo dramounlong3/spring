@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -76,11 +77,13 @@ public class MyController {
     public ResponseEntity<?> test4(@RequestParam Integer id,
                                    @RequestParam(name = "testId") Integer sid,
                                    @RequestParam(required = false) String name,
-                                   @RequestParam(defaultValue = "99") Integer age) {
+                                   @RequestParam(defaultValue = "99") Integer age,
+                                   @RequestHeader(required = false) String header1) {
         System.out.println("id: " + id);
         System.out.println("sid: " + sid);
         System.out.println("name: " + name);
         System.out.println("age: " + age);
+        System.out.println("header1: " + header1);
         // console output
         // id: 123
         // sid: 456
@@ -178,7 +181,10 @@ public class MyController {
 
     //spring jdbc insert
     @PostMapping("/sql/student")
-    public ResponseEntity<?> insert(@RequestBody Student student) {
+    public ResponseEntity<?> insert(@RequestBody Student student,
+                                    @RequestHeader String header2) {
+
+        System.out.println("header2= " + header2);
 
         //透過冒號變數的方式讓下面宣告的map代入
         String sql = "INSERT INTO student(id, name, courseList, todoList) VALUE(:studentId, :studentName, :studentCourseList, :studentTodoList)";

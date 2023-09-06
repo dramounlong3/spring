@@ -95,7 +95,7 @@ public class RestTemplateServiceImp implements RestTemplateService {
 
 
     @Override
-    public ResponseEntity<ChannelMsgtype[]> exchangeGet() {
+    public ResponseEntity<Student> exchangeGet() {
         RestTemplate restTemplate = new RestTemplate();
 
         //設定header
@@ -106,13 +106,16 @@ public class RestTemplateServiceImp implements RestTemplateService {
         HttpEntity httpEntity = new HttpEntity<>(httpHeaders);
 
         Map<String, Object> queryParaMap = new HashMap<>();
-        queryParaMap.put("graduate", true);
+        queryParaMap.put("id", 222);
+        queryParaMap.put("testid", 333);
+        queryParaMap.put("name", "Woo");
 
-        ResponseEntity<ChannelMsgtype[]> getStudentEntity = restTemplate.exchange(
-                "http://localhost:8081/kernel/channelMsgtype?graduate={graduate}",
+
+        ResponseEntity<Student> getStudentEntity = restTemplate.exchange(
+                "http://localhost:8081/demo/test4?id={id}&name={name}&testId={testid}",
                 HttpMethod.GET,
                 httpEntity,
-                ChannelMsgtype[].class,
+                Student.class,
                 queryParaMap
         );
 
@@ -122,7 +125,7 @@ public class RestTemplateServiceImp implements RestTemplateService {
     }
 
     @Override
-    public ResponseEntity<String> exchangePost(ChannelMsgtype channelMsgtype) {
+    public ResponseEntity<String> exchangePost(Student Student) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -131,10 +134,10 @@ public class RestTemplateServiceImp implements RestTemplateService {
         //由exchange發起post請求, 一定要加上content type = application/json
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity httpEntity = new HttpEntity<>(channelMsgtype, httpHeaders);
+        HttpEntity httpEntity = new HttpEntity<>(Student, httpHeaders);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "http://localhost:8081/kernel/channelMsgtype",
+                "http://localhost:8081/demo/sql/student",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
