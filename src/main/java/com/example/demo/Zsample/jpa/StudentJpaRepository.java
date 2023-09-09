@@ -22,4 +22,7 @@ public interface StudentJpaRepository extends CrudRepository<StudentJpa, Integer
     @Query(value = "SELECT id, name, courselist, todolist FROM threetier WHERE id = ?1 AND todolist = ?2", nativeQuery = true)
     List<StudentJpa> useQuery(Integer id, String todolist);
 
+    @Query(value = "SELECT name FROM threetier", nativeQuery = true)
+    public List<String> findAllNames();
+
 }
